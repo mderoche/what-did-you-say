@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "projects": {
+    "api": "apps/api",
+    "api-interfaces": "libs/api-interfaces",
+    "what-did-you-say": "apps/what-did-you-say",
+    "what-did-you-say-e2e": "apps/what-did-you-say-e2e"
+  }
+}
