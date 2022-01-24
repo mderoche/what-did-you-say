@@ -1,0 +1,14 @@
+<div class="keyword-pack-control">
+    <div class="name">...{{ keywordPack.name }}</div>
+
+    <select [formControl]="control">
+        <option value="" selected>some {{ keywordPack.name }}</option>
+
+        <option
+            *ngFor="let keyword of keywordPack.keywords"
+            value="{{ keyword.name }}"
+        >
+            {{ keyword.description || keyword.name }}
+        </option>
+    </select>
+</div>

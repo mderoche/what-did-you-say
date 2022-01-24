@@ -1,0 +1,15 @@
+{
+    "root": "libs/words",
+    "sourceRoot": "libs/words/src",
+    "projectType": "library",
+    "targets": {
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["libs/words/**/*.ts"]
+            }
+        }
+    },
+    "tags": []
+}

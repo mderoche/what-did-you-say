@@ -1,0 +1,10 @@
+<div class="search-results">
+    <kbd
+        *ngFor="let searchResult of searchResults"
+        title="{{ searchResult.score }}"
+        class="mr-2 mb-2 d-inline-block"
+        (click)="select(searchResult.word)"
+    >
+        {{ searchResult.word.word }}
+    </kbd>
+</div>

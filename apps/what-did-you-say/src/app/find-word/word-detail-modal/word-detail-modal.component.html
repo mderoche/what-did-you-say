@@ -1,0 +1,75 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        <strong>{{ wordDetail.word.word | titlecase }}</strong>
+    </h4>
+
+    <button type="button" class="close" (click)="activeModal.dismiss()">
+        <span>&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <!--
+        words can have multiple definitions, each with different lists
+        of stems and synonyms
+    -->
+
+    <ul ngbNav #nav="ngbNav" class="nav-tabs">
+        <li ngbNavItem>
+            <a ngbNavLink>Definition</a>
+            <ng-template ngbNavContent>
+                <div
+                    class="definition mt-3"
+                    *ngFor="let def of wordDetail.definitions"
+                >
+                    <!-- short definition of the word -->
+                    <div class="alert alert-dark">
+                        {{ def.definition | capitalizeSentence }}.
+                    </div>
+
+                    <!-- stems of the word, showing different forms that can be used -->
+                    <h5 class="card-title">Stems</h5>
+                    <div class="stems">
+                        <kbd
+                            *ngFor="let stem of def.stems"
+                            class="mr-2 mb-2 d-inline-block"
+                        >
+                            {{ stem }}
+                        </kbd>
+                    </div>
+
+                    <!-- synonyms of the word, giving extra options to the user -->
+                    <h5 class="card-title mt-2">Synonyms</h5>
+                    <div class="stems">
+                        <kbd
+                            *ngFor="let synonym of def.synonyms"
+                            class="mr-2 mb-2 d-inline-block"
+                        >
+                            {{ synonym }}
+                        </kbd>
+                    </div>
+                </div>
+            </ng-template>
+        </li>
+        <li ngbNavItem>
+            <a ngbNavLink>Tone Rankings</a>
+            <ng-template ngbNavContent>
+                <wdys-tone-ranking
+                    [toneRanking]="wordDetail.word.toneRankings[0]"
+                ></wdys-tone-ranking>
+            </ng-template>
+        </li>
+    </ul>
+
+    <div [ngbNavOutlet]="nav"></div>
+</div>
+
+<div class="modal-footer">
+    <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close()"
+    >
+        Close
+    </button>
+</div>

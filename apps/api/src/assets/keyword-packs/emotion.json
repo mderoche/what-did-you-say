@@ -1,0 +1,18 @@
+{
+    "name": "emotion",
+    "description": "What's the closest primary emotion the speaker is feeling?",
+    "keywords": [
+        { "name": "fear" },
+        { "name": "anger" },
+        { "name": "joy" },
+        { "name": "sadness" },
+        { "name": "disgust" },
+        { "name": "contempt" },
+        { "name": "surprise" },
+        { "name": "shame" },
+        { "name": "shyness" },
+        { "name": "guilt" },
+        { "name": "confusion" },
+        { "name": "confidence" }
+    ]
+}

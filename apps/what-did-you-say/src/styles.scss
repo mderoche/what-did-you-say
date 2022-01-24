@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;700;900&display=swap');
+@import '~bootstrap/scss/bootstrap';
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    background-color: #20bf55;
+    background-image: linear-gradient(315deg, #20bf55 0%, #01baef 74%);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+}
+
+.modal,
+.card {
+    color: var(--dark);
+}
+
+.title {
+    font-weight: 900;
+    font-size: 65px;
+}
+
+.ultrabold {
+    font-weight: 900;
+}

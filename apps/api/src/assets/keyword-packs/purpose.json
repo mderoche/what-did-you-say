@@ -1,0 +1,14 @@
+{
+    "name": "purpose",
+    "description": "Why is the speaker speaking?",
+    "keywords": [
+        { "name": "information", "description": "reveal information" },
+        { "name": "observation", "description": "make an observation" },
+        { "name": "suggestion", "description": "make a suggestion" },
+        { "name": "command", "description": "give a command" },
+        { "name": "question", "description": "ask a question" },
+        { "name": "scold", "description": "scold" },
+        { "name": "laud", "description": "laud" },
+        { "name": "mock", "description": "mock" }
+    ]
+}

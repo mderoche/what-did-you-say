@@ -1,0 +1,15 @@
+{
+    "root": "libs/transformers",
+    "sourceRoot": "libs/transformers/src",
+    "projectType": "library",
+    "targets": {
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["libs/transformers/**/*.ts"]
+            }
+        }
+    },
+    "tags": []
+}

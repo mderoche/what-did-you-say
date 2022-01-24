@@ -1,0 +1,14 @@
+<div *ngFor="let pack of toneRanking | keyvalue">
+    <div class="pack-name ultrabold">{{ pack.key }}</div>
+
+    <div class="keywords">
+        <div *ngFor="let keyword of pack.value | keyvalue" class="row">
+            <div class="col text-right">{{ keyword.key }}</div>
+            <div class="col">
+                <wdys-tone-ranking-bar
+                    [rank]="keyword.value"
+                ></wdys-tone-ranking-bar>
+            </div>
+        </div>
+    </div>
+</div>

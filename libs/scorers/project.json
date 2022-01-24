@@ -1,0 +1,15 @@
+{
+    "root": "libs/scorers",
+    "sourceRoot": "libs/scorers/src",
+    "projectType": "library",
+    "targets": {
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["libs/scorers/**/*.ts"]
+            }
+        }
+    },
+    "tags": []
+}

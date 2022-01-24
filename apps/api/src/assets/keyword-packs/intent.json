@@ -1,0 +1,10 @@
+{
+    "name": "intent",
+    "description": "What type of statement is the speaker making?",
+    "keywords": [
+        { "name": "declarative" },
+        { "name": "imperative" },
+        { "name": "interrogative" },
+        { "name": "exclamatory" }
+    ]
+}

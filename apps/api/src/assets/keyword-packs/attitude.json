@@ -1,0 +1,15 @@
+{
+    "name": "attitude",
+    "description": "What's the closest primary attitude the speaker has toward the listener?",
+    "keywords": [
+        {
+            "name": "friendly"
+        },
+        {
+            "name": "hostile"
+        },
+        {
+            "name": "apathetic"
+        }
+    ]
+}

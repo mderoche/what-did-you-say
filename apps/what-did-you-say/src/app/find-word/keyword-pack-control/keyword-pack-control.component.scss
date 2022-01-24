@@ -1,0 +1,40 @@
+.name {
+    font-size: 25px;
+    text-transform: uppercase;
+    font-weight: 300;
+    opacity: 0.8;
+}
+
+select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    color: #fff;
+    opacity: 0.6;
+    border: 0;
+    text-transform: lowercase;
+    border-bottom: 3px solid #fff;
+    width: 100%;
+    padding-left: 5px;
+    font-size: 20px;
+}
+
+select:focus {
+    outline: none;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+option {
+    border: 0;
+    background: var(--light);
+    text-transform: lowercase;
+    color: var(--dark);
+}
+
+option:first-child {
+    background-color: var(--dark);
+    color: var(--light);
+}

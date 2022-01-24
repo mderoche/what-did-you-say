@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Message } from '@what-did-you-say/api-interfaces';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+
+import * as WordActions from './+state/words.actions';
 
 @Component({
-  selector: 'what-did-you-say-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'what-did-you-say-root',
+    templateUrl: './app.component.html'
 })
-export class AppComponent {
-  hello$ = this.http.get<Message>('/api/hello');
-  constructor(private http: HttpClient) {}
+export class AppComponent implements OnInit {
+    constructor(private readonly store: Store) {}
+
+    ngOnInit() {
+        this.store.dispatch(WordActions.keywordPacks.load());
+    }
 }

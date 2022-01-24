@@ -1,105 +1,179 @@
+# What Did You Say
 
+A work-in-progress to find better alternatives to "said."
 
-# WhatDidYouSay
+The idea behind this project is to take speech and reduce it to a variety of tones. Through these tones,
+we can begin to make connections between words that share the same intent.
 
-This project was generated using [Nx](https://nx.dev).
+"Said" is a crux with no contexual information. Swapping "said" out for something more flavorful will improve any piece.
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+**All words currently using randomly generated data.**
 
-🔎 **Smart, Fast and Extensible Build System**
+## Prerequisites
 
-## Quick Start & Documentation
+-   API key from https://dictionaryapi.com/
+-   Node + NPM
 
-[Nx Documentation](https://nx.dev/angular)
+## Setup
 
-[10-minute video showing all Nx features](https://nx.dev/getting-started/intro)
+```
+# install dependencies
+npm i
 
-[Interactive Tutorial](https://nx.dev/tutorial/01-create-application)
+# inject API key into .env
+touch .env
+echo 'dictionaryApiKey=[KEY]' >> .env
 
-## Adding capabilities to your workspace
+# start the frontend in one terminal
+npm start
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+# start the api in another terminal
+npm start api
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+# open the app
+open https://localhost:4200
+```
 
-Below are our core plugins:
+## UI Screenshots
 
-- [Angular](https://angular.io)
-  - `ng add @nrwl/angular`
-- [React](https://reactjs.org)
-  - `ng add @nrwl/react`
-- Web (no framework frontends)
-  - `ng add @nrwl/web`
-- [Nest](https://nestjs.com)
-  - `ng add @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `ng add @nrwl/express`
-- [Node](https://nodejs.org)
-  - `ng add @nrwl/node`
+See: `assets/screenshots/`
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+## Keyword Packs
 
-## Generate an application
+A database of potential alternatives for "said" are ranked against tones provided through "keyword packs". Keyword packs are primarily arrays of simple keywords that could indicate tone of speech.
 
-Run `ng g @nrwl/angular:app my-app` to generate an application.
+For example, the `volume` keyword pack contains keywords for `quietly`, `loudly`, ...
 
-> You can use any of the plugins above to generate applications as well.
+### Developing Keyword Packs
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+This system is designed in a way to support dynamic keyword packs. The eventual intention is to let users select which
+keyword packs they'd like to use, rather than the current five static packs.
 
-## Generate a library
+To "install" a new keyword pack, land a JSON file in: `apps/api/assets/keyword-packs/`
 
-Run `ng g @nrwl/angular:lib my-lib` to generate a library.
+Use the following format: (TODO: JSON schema definition for these)
 
-> You can also use any of the plugins above to generate libraries as well.
+```
+{
+    "name": "somePack",
+    "description": "Short description of the keyword pack (used in the UI)",
+    "keywords": [
+        { "name": "<keyword>", "description": "<description (used in UI)>" },
+        ...
+    ]
+}
+```
 
-Libraries are shareable across libraries and applications. They can be imported from `@what-did-you-say/mylib`.
+If the keywords are self-explanatory and don't need separate UI descriptions, `keywords` can be an array of strings:
 
-## Development server
+```
+{
+    "name": "somePack",
+    "description": "Short description of the keyword pack (used in the UI)",
+    "keywords": [
+        <keyword>
+        ...
+    ]
+}
+```
 
-Run `ng serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+## Scorers and Ranking Synonyms
 
-## Code scaffolding
+### Search Parameters
 
-Run `ng g component my-component --project=my-app` to generate a new component.
+Search parameters are stored as an object where _each key represents a keyword pack_ and _each value represents a single selected keyword_ for that pack.
 
-## Build
+For example,
 
-Run `ng build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```
+// search parameters
+{
+    "intent": "exclamatory"
+    "attitude": "friendly"
+    ...
+}
+```
 
-## Running unit tests
+These values are generated from the dropdowns on the left side of the UI.
 
-Run `ng test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+### Tone Rankings
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+Each synonym in the dataset has a ranking of 1-5 for each keyword in each keyword pack; one collection of these
+rankings is called a ToneRanking. A ToneRanking, in other words, is an object where each key is a keyword pack, which holds a
+nested object where each keyword in that pack is rated from 1-5 depending on how relevant that keyword is to the synonym.
 
-## Running end-to-end tests
+For example,
 
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+```
+// ToneRanking for synonym "yell", while happy
+{
+    "intent": {
+        "declarative": 0,
+        "exclamatory": 5,
+        ...
+    },
+    "attitude: {
+        "friendly": 5,
+        "hostile": 0
+    }
+}
+```
 
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
+**Synonyms can have multiple ToneRankings!** For example, you can "yell" at someone for doing something bad, or you can "yell" (as in cheer) when you win a hand of cards. Different usages of a synonym rank tones differently, and thus each synonym has an array of independent ToneRankings.
 
-## Understand your workspace
+**All ToneRankings are randomly generated.** Until the work is done to classify a large list of "said"-alternatives, all of the ToneRanking data is random for development.
 
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
+## Scorers
 
-## Further help
+Scorers are plugin functions that combine ToneRankings and SearchParameters to score each synonym in the dataset on how relevant it is to the provided SearchParameters.
 
-Visit the [Nx Documentation](https://nx.dev/angular) to learn more.
+The most basic scorer is the AccumulationScorer, where each synonym is scored based on the aggregate total of keyword rankings.
 
+### Develpoping a Scorer
 
+```
+// template for new Scorer
+//     scores everything at 0
 
+export async function someScorer(
+    searchResults: SearchResult[],
+    searchParams: SearchParams
+): Promise<SearchResult[]> {
+    return searchResults.map(sr => {
+        return {
+            ...sr,
+            score: 0
+        };
+    });
+}
+```
 
+Scorer functions take two parameters:
 
+| Parameter                     | Use                                                      |
+| ----------------------------- | -------------------------------------------------------- |
+| searchResults: SearchResult[] | Incoming array of search results that need to be scored. |
+| searchParams: SearchParams    | Search parameters to consider when scoring.              |
 
-## ☁ Nx Cloud
+Should always return a Promise carrying the newly scored set of search results.
 
-### Distributed Computation Caching & Distributed Task Execution
+## Transforms
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+After scoring, Transforms are plugin functions that use those scores to transform each result with the context of all results. For example, the `PercentileTransform` adds a `percentile` key to each result, classifying each result into a 0-100 percentile when compared against the other scores in the result set.
 
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
+### Developing a Transform
 
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
+```
+// template for new Transform
+//     does nothing
 
-Visit [Nx Cloud](https://nx.app/) to learn more.
+export function someTransform(
+    searchResult: SearchResult,
+    searchResults: SearchResult[]
+): SearchResult {
+    returns searchResult;
+}
+
+```
+
+A Transform takes a `searchResult`, all `searchResults`, and returns a `searchResult`.

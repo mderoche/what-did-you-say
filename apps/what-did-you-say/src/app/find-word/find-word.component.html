@@ -1,0 +1,39 @@
+<div class="row">
+    <!-- search form -->
+    <div class="col-4 pr-5">
+        <div class="sentence mb-3">
+            I <strong class="ultrabold">said</strong> something with...
+        </div>
+        <form *ngIf="form" [formGroup]="form">
+            <div class="mb-4" *ngFor="let keywordPack of keywordPacks$ | async">
+                <wdys-keyword-pack-control
+                    [keywordPack]="keywordPack"
+                    [control]="form.get(keywordPack.name)"
+                ></wdys-keyword-pack-control>
+            </div>
+        </form>
+    </div>
+
+    <!-- results -->
+    <div class="col-8">
+        <!-- top percentile resuls -->
+        <div *ngIf="(bestSearchResults$ | async).length">
+            <p class="sentence">Instead, I could have...</p>
+
+            <wdys-search-results
+                [searchResults]="bestSearchResults$ | async"
+                (wordSelected)="openWordDetail($event)"
+            ></wdys-search-results>
+        </div>
+
+        <!-- decent percentile resuls -->
+        <div *ngIf="(bestSearchResults$ | async).length">
+            <p class="sentence mt-4">I <em>might</em> have...</p>
+
+            <wdys-search-results
+                [searchResults]="decentSearchResults$ | async"
+                (wordSelected)="openWordDetail($event)"
+            ></wdys-search-results>
+        </div>
+    </div>
+</div>
