@@ -28,8 +28,7 @@ export class DictionaryService {
             >(
                 `${environment.dictionaryApiUrl}/${word.word}?key=${process.env.dictionaryApiKey}`
             )
-            .toPromise()
-            .catch(err => console.log(err));
+            .toPromise();
 
         // just take the first verb
         // @todo support multiple definitions out of this method
